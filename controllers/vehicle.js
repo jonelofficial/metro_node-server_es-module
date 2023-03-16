@@ -147,15 +147,16 @@ export const createVehicle = (req, res, next) => {
     newImageURL = req.file.path.replace("\\", "/");
   }
 
-  const plate_no = req.body.plate_no.replace(/\s/g, "");
-  const vehicle_type = req.body.vehicle_type;
-  const name = req.body.name;
-  const brand = req.body.brand;
-  const fuel_type = req.body.fuel_type;
-  const km_per_liter = req.body.km_per_liter;
-  // const department = req.body.department || null;
-  const department = JSON.parse(req.body.department) || null;
-  const profile = newImageURL;
+  const {
+    plate_no,
+    vehicle_type,
+    name,
+    brand,
+    fuel_type,
+    km_per_liter,
+    department,
+    profile,
+  } = req.body;
 
   Vehicle.find({ plate_no: plate_no })
     .then((result) => {
@@ -165,13 +166,13 @@ export const createVehicle = (req, res, next) => {
           .json({ error: `Plate Number "${plate_no}" already exist` });
       } else {
         const vehicle = new Vehicle({
-          plate_no: plate_no,
+          plate_no: plate_no.replace(/\s/g, ""),
           vehicle_type: vehicle_type,
           name: name,
           brand: brand,
           fuel_type: fuel_type,
           km_per_liter: km_per_liter,
-          department: department,
+          department: JSON.parse(department) || null,
           profile: profile,
         });
 
@@ -211,20 +212,19 @@ export const updateVehicle = (req, res, next) => {
     newImageURL = req.file.path.replace("\\", "/");
   }
 
-  const vehicleId = req.params.vehicleId;
-
-  const plate_no = req.body.plate_no || null;
-  const vehicle_type = req.body.vehicle_type || null;
-  const name = req.body.name || null;
-  const brand = req.body.brand || null;
-  const fuel_type = req.body.fuel_type || null;
-  const km_per_liter = req.body.km_per_liter || null;
-  // const department = req.body.department || null;
-  const department = JSON.parse(req.body.department) || null;
-
   const profile = newImageURL || null;
 
-  console.log(vehicleId);
+  const { vehicleId } = req.params;
+
+  const {
+    plate_no,
+    vehicle_type,
+    name,
+    brand,
+    fuel_type,
+    km_per_liter,
+    department,
+  } = req.body;
 
   Vehicle.find({ plate_no: plate_no })
     .then((result) => {
@@ -254,7 +254,7 @@ export const updateVehicle = (req, res, next) => {
             vehicle.brand = brand || vehicle.brand;
             vehicle.fuel_type = fuel_type || vehicle.fuel_type;
             vehicle.km_per_liter = km_per_liter || vehicle.km_per_liter;
-            vehicle.department = department || vehicle.department;
+            vehicle.department = JSON.parse(department) || vehicle.department;
             vehicle.profile = profile || vehicle.profile;
 
             return vehicle.save();
@@ -283,46 +283,6 @@ export const updateVehicle = (req, res, next) => {
       }
       next(err);
     });
-
-  // Vehicle.findById(vehicleId)
-  //   .then((vehicle) => {
-  //     if (!vehicle) {
-  //       const error = new Error("Could not found vehicle");
-  //       error.statusCode = 500;
-  //       throw error;
-  //     }
-
-  //     if (
-  //       profile !== vehicle.profile &&
-  //       vehicle.profile &&
-  //       profile != undefined
-  //     ) {
-  //       clearImage(vehicle.profile);
-  //     }
-
-  //     vehicle.plate_no = plate_no || vehicle.plate_no;
-  //     vehicle.vehicle_type = vehicle_type || vehicle.vehicle_type;
-  //     vehicle.name = name || vehicle.name;
-  //     vehicle.brand = brand || vehicle.brand;
-  //     vehicle.fuel_type = fuel_type || vehicle.fuel_type;
-  //     vehicle.km_per_liter = km_per_liter || vehicle.km_per_liter;
-  //     vehicle.department = department || vehicle.department;
-  //     vehicle.profile = profile || vehicle.profile;
-
-  //     return vehicle.save();
-  //   })
-  //   .then((result) => {
-  //     res.status(201).json({
-  //       message: "Success update vehicle",
-  //       data: result,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     if (!err.statusCode) {
-  //       err.statusCode = 500;
-  //     }
-  //     next(err);
-  //   });
 };
 
 export const deleteVehicle = (req, res, next) => {

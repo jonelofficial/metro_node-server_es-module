@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "fs";
+import bcrypt from "bcryptjs";
 import path from "path";
 import { validationResult } from "express-validator";
 import User from "../models/user.js";
 import dotenv from "dotenv";
-
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -106,25 +105,24 @@ export const updateUser = (req, res, next) => {
     newImageURl = req.file.path.replace("\\", "/");
   }
 
-  const employee_id = req.body.employee_id || null;
-  const first_name = req.body.first_name || null;
-  const last_name = req.body.last_name || null;
-  const username = req.body.username || null;
-  const password = req.body.password || null;
-  const trip_template = req.body.trip_template || null;
-  const role = req.body.role || null;
-  const license_exp = req.body.license_exp || null;
-  const status = req.body.status || null;
-  const profile = newImageURl || null;
-  const department = req.body.department;
-  const sub_unit = req.body.sub_unit;
-  const location = req.body.location;
-  const division = req.body.division;
-  const division_category = req.body.division_category;
-  const company = req.body.company;
-  const permission =
-    (req.body?.permission && JSON.parse(req.body.permission)) || null;
-  // image validation here
+  const {
+    employee_id,
+    first_name,
+    last_name,
+    username,
+    password,
+    trip_template,
+    role,
+    license_exp,
+    status,
+    department,
+    sub_unit,
+    location,
+    division,
+    division_category,
+    company,
+    permission,
+  } = req.body;
 
   User.findById(userId)
     .then((user) => {
@@ -135,7 +133,11 @@ export const updateUser = (req, res, next) => {
         throw error;
       }
 
-      if (profile !== user.profile && user.profile && profile != undefined) {
+      if (
+        newImageURl !== user.profile &&
+        user.profile &&
+        newImageURl != undefined
+      ) {
         clearImage(user.profile);
       }
 
@@ -153,7 +155,7 @@ export const updateUser = (req, res, next) => {
               license_exp === user.license_exp ? user.license_exp : license_exp;
             user.status = status || user.status;
             user.role = role || user.role;
-            user.profile = profile || user.profile;
+            user.profile = newImageURl || user.profile;
             user.department = department || user.department;
             user.sub_unit = sub_unit || user.sub_unit;
             user.location = location || user.location;
@@ -161,7 +163,7 @@ export const updateUser = (req, res, next) => {
             user.division_category =
               division_category || user.division_category;
             user.company = company || user.company;
-            user.permission = permission || user.permission;
+            user.permission = JSON.parse(permission || null) || user.permission;
             return user.save();
           })
           .then((result) => {
@@ -321,24 +323,24 @@ export const createUser = (req, res, next) => {
     newImageURl = req.file.path.replace("\\", "/");
   }
 
-  const employee_id = req.body.employee_id;
-  const first_name = req.body.first_name;
-  const last_name = req.body.last_name;
-  const username = req.body.username;
-  const password = req.body.password;
-  const trip_template = req.body.trip_template;
-  const role = req.body.role;
-  const status = req.body.status;
-  const license_exp = req.body.license_exp;
-  const profile = newImageURl;
-  const department = req.body.department;
-  const sub_unit = req.body.sub_unit;
-  const location = req.body.location;
-  const division = req.body.division;
-  const division_category = req.body.division_category;
-  const company = req.body.company;
-  const permission =
-    (req.body?.permission && JSON.parse(req.body.permission)) || null;
+  const {
+    employee_id,
+    first_name,
+    last_name,
+    username,
+    password,
+    trip_template,
+    role,
+    status,
+    license_exp,
+    department,
+    sub_unit,
+    location,
+    division,
+    division_category,
+    company,
+    permission,
+  } = req.body;
 
   bcrypt
     .hash(password, 12)
@@ -353,14 +355,14 @@ export const createUser = (req, res, next) => {
         role: role,
         status: status,
         license_exp: license_exp,
-        profile: profile,
+        profile: newImageURl,
         department: department,
         sub_unit: sub_unit,
         location: location,
         division: division,
         division_category: division_category,
         company: company,
-        permission: permission,
+        permission: JSON.parse(permission || null),
       });
       return user.save();
     })
@@ -379,9 +381,9 @@ export const createUser = (req, res, next) => {
 };
 
 export const login = (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
   let loadedUser;
+
   User.findOne({ username: username })
     .then(async (user) => {
       if (!user || user?.status !== "active") {

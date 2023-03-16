@@ -192,7 +192,7 @@ export const HighestKMrun = (req, res, next) => {
       const obj = filteredData.sort((a, b) => b.km - a.km).slice(0, 20);
 
       return obj.filter((trip) => {
-        searchItem = search.toLowerCase();
+        const searchItem = search.toLowerCase();
         const searchProps = searchBy.split(".");
         let obj = trip;
         for (const prop of searchProps) {
@@ -286,7 +286,7 @@ export const TVDTdeparment = async (req, res, next) => {
         .then(() => {
           filteredData.slice(0, 20);
           const newObj = filteredData.filter((item) => {
-            searchItem = search.toLowerCase();
+            const searchItem = search.toLowerCase();
             const searchProps = searchBy.split(".");
             let obj = item;
             for (const prop of searchProps) {

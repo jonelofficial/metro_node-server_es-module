@@ -88,7 +88,6 @@ mongoose
   .connect(process.env.DB_CONN)
   .then(() => {
     const server = app.listen(process.env.PORT || 8080);
-    // const io = require("./socket").init(server);
     const io = socket.init(server);
     io.on("connection", (socket) => {
       console.log("Client Connected");

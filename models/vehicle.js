@@ -33,7 +33,6 @@ const vehicleSchema = new Schema(
       type: String,
     },
     department: {
-      //  type: String
       type: Object,
     },
   },

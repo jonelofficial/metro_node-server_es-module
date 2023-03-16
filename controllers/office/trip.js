@@ -270,15 +270,17 @@ export const updateTrip = (req, res, next) => {
     newImageURL = req.file.path.replace("\\", "/");
   }
 
-  const user_id = req.body.user_id || null;
-  const vehicle_id = req.body.vehicle_id || null;
-  const odometer = req.body.odometer || null;
-  const odometer_done = req.body.odometer_done || null;
-  const odometer_image_path = newImageURL || null;
-  const companion = req.body.companion || null;
-  const others = req.body.others || null;
-  const points = req.body.points || null;
-  const charging = req.body.charging || null;
+  const {
+    user_id,
+    vehicle_id,
+    odometer,
+    odometer_done,
+    odometer_image_path,
+    others,
+    points,
+    charging,
+    companion,
+  } = req.body;
 
   Trip.findById(tripId)
     .then((trip) => {
@@ -292,17 +294,6 @@ export const updateTrip = (req, res, next) => {
       if (req.file && odometer_image_path !== trip.odometer_image_path) {
         clearImage(trip.odometer_image_path);
       }
-
-      trip.user_id = user_id || trip.user_id;
-      trip.vehicle_id = vehicle_id || trip.vehicle_id;
-      trip.odometer = odometer || trip.odometer;
-      trip.odometer_done = odometer_done || trip.odometer_done;
-      trip.odometer_image_path =
-        odometer_image_path || trip.odometer_image_path;
-      trip.companion = companion || trip.companion;
-      trip.others = others || trip.others;
-      trip.points = points || trip.points;
-      trip.charging = charging || trip.charging;
 
       return Trip.findOneAndUpdate(
         { _id: trip._id },
