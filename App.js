@@ -51,7 +51,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   cors({
     origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "*",
     preflightContinue: false,
     optionsSuccessStatus: 204,
   })
@@ -84,13 +84,11 @@ app.use((error, req, res, next) => {
 // Database connection
 mongoose
   .connect(process.env.DB_CONN)
-  .then(() =>
-    app.listen(process.env.PORT || 8080, function () {
-      console.log(
-        "Express server listening on port %d in %s mode",
-        this.address().port,
-        app.settings.env
-      );
-    })
-  )
+  .then(() => {
+    const server = app.listen(process.env.PORT || 8080);
+    const io = require("./socket").init(server);
+    io.on("connection", (socket) => {
+      console.log("Client Connected");
+    });
+  })
   .catch((err) => console.log(err));

@@ -1,6 +1,7 @@
 // const { isObjectIdOrHexString } = require("mongoose");
 const GasStation = require("../models/gas_station");
 var ObjectId = require("mongoose").Types.ObjectId;
+const io = require("../socket");
 
 exports.deleteAllStations = async (req, res, next) => {
   if (req.role !== "admin") {
@@ -120,6 +121,10 @@ exports.createStation = (req, res, next) => {
         station
           .save()
           .then((result) => {
+            io.getIO().emit("gas-station", {
+              action: "create",
+              post: result,
+            });
             res.status(201).json({
               message: "Success create gas station",
               data: result,
