@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const gasStationSchema = new Schema(
   {
@@ -13,4 +13,6 @@ const gasStationSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("GasStation", gasStationSchema);
+const GasStation = mongoose.model("GasStation", gasStationSchema);
+
+export default GasStation;

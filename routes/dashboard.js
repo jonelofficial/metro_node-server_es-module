@@ -1,16 +1,16 @@
-const express = require("express");
+import express from "express";
+import isAuth from "../middleware/is-auth.js";
+import {
+  HighestKMrun,
+  LongestTravelDuration,
+  TVDTdeparment,
+  TotalTripDriver,
+} from "../controllers/dashboard.js";
 const router = express.Router();
-const isAuth = require("../middleware/is-auth");
 
-const dashboardController = require("../controllers/dashboard");
+router.get("/tvdt-department", isAuth, TVDTdeparment);
+router.get("/highest-km", isAuth, HighestKMrun);
+router.get("/longest-duration", isAuth, LongestTravelDuration);
+router.get("/total-trip-driver", isAuth, TotalTripDriver);
 
-router.get("/tvdt-department", isAuth, dashboardController.TVDTdeparment);
-router.get("/highest-km", isAuth, dashboardController.HighestKMrun);
-router.get(
-  "/longest-duration",
-  isAuth,
-  dashboardController.LongestTravelDuration
-);
-router.get("/total-trip-driver", isAuth, dashboardController.TotalTripDriver);
-
-module.exports = router;
+export default router;

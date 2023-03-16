@@ -1,11 +1,18 @@
-const express = require("express");
-const { body } = require("express-validator");
-const User = require("../models/user");
+import express from "express";
+import { body } from "express-validator";
+import User from "../models/user.js";
+import {
+  createUser,
+  deleteAllUsers,
+  deleteUser,
+  getUsers,
+  importUsers,
+  login,
+  updateUser,
+} from "../controllers/auth.js";
+import isAuth from "../middleware/is-auth.js";
 
 const router = express.Router();
-
-const authController = require("../controllers/auth");
-const isAuth = require("../middleware/is-auth");
 
 router.post(
   "/create-user",
@@ -23,12 +30,12 @@ router.post(
       .withMessage("Password minimum length is 5"),
   ],
   isAuth,
-  authController.createUser
+  createUser
 );
 
-router.post("/login", authController.login);
-router.get("/users", isAuth, authController.getUsers);
-router.delete("/delete-user/:userId", isAuth, authController.deleteUser);
+router.post("/login", login);
+router.get("/users", isAuth, getUsers);
+router.delete("/delete-user/:userId", isAuth, deleteUser);
 router.put(
   "/update-user/:userId",
   [
@@ -41,9 +48,9 @@ router.put(
     }),
   ],
   isAuth,
-  authController.updateUser
+  updateUser
 );
-router.post("/import-users", isAuth, authController.importUsers);
-router.delete("/delete-all-users", isAuth, authController.deleteAllUsers);
+router.post("/import-users", isAuth, importUsers);
+router.delete("/delete-all-users", isAuth, deleteAllUsers);
 
-module.exports = router;
+export default router;

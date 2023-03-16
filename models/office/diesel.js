@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const dieselSchema = new Schema({
   gas_station_id: {
@@ -39,4 +39,6 @@ const dieselSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("DieselOffice", dieselSchema);
+const DieselOffice = mongoose.model("DieselOffice", dieselSchema);
+
+export default DieselOffice;

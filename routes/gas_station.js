@@ -1,24 +1,22 @@
-const express = require("express");
+import express from "express";
+import isAuth from "../middleware/is-auth.js";
+import {
+  createStation,
+  deleteAllStations,
+  deleteStation,
+  getStation,
+  importGasStations,
+  updateStation,
+} from "../controllers/gas_station.js";
 
 const router = express.Router();
 
-const gasStationController = require("../controllers/gas_station");
-const isAuth = require("../middleware/is-auth");
+router.get("/stations", getStation);
+router.post("/station", isAuth, createStation);
+router.put("/station/:stationId", isAuth, updateStation);
+router.delete("/station/:stationId", isAuth, deleteStation);
 
-router.get("/stations", gasStationController.getStation);
-router.post("/station", isAuth, gasStationController.createStation);
-router.put("/station/:stationId", isAuth, gasStationController.updateStation);
-router.delete(
-  "/station/:stationId",
-  isAuth,
-  gasStationController.deleteStation
-);
+router.post("/import-stations", isAuth, importGasStations);
+router.delete("/delete-all-stations", isAuth, deleteAllStations);
 
-router.post("/import-stations", isAuth, gasStationController.importGasStations);
-router.delete(
-  "/delete-all-stations",
-  isAuth,
-  gasStationController.deleteAllStations
-);
-
-module.exports = router;
+export default router;

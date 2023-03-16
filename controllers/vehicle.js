@@ -1,9 +1,13 @@
-const Vehicle = require("../models/vehicle");
-const path = require("path");
-const fs = require("fs");
-const department = require("../utility/department");
+import Vehicle from "../models/vehicle.js";
+import path from "path";
+import fs from "fs";
+import { department } from "../utility/department.js";
+import { fileURLToPath } from "url";
 
-exports.deleteAllVehicles = async (req, res, next) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const deleteAllVehicles = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -24,7 +28,7 @@ exports.deleteAllVehicles = async (req, res, next) => {
     });
 };
 
-exports.importVehicles = async (req, res, next) => {
+export const importVehicles = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -76,7 +80,7 @@ exports.importVehicles = async (req, res, next) => {
     : res.status(404).json({ message: "no item found" });
 };
 
-exports.getUserVehicle = (req, res, next) => {
+export const getUserVehicle = (req, res, next) => {
   const plateNo = req.query.plateNo;
 
   Vehicle.find({ plate_no: plateNo })
@@ -98,7 +102,7 @@ exports.getUserVehicle = (req, res, next) => {
     });
 };
 
-exports.getVehicles = (req, res, next) => {
+export const getVehicles = (req, res, next) => {
   let totalItems;
 
   const currentPage = req.query.page || 1;
@@ -137,7 +141,7 @@ exports.getVehicles = (req, res, next) => {
     });
 };
 
-exports.createVehicle = (req, res, next) => {
+export const createVehicle = (req, res, next) => {
   let newImageURL;
   if (req.file) {
     newImageURL = req.file.path.replace("\\", "/");
@@ -195,7 +199,7 @@ exports.createVehicle = (req, res, next) => {
     });
 };
 
-exports.updateVehicle = (req, res, next) => {
+export const updateVehicle = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 500;
@@ -321,7 +325,7 @@ exports.updateVehicle = (req, res, next) => {
   //   });
 };
 
-exports.deleteVehicle = (req, res, next) => {
+export const deleteVehicle = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 500;

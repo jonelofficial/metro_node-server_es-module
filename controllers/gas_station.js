@@ -1,9 +1,9 @@
-// const { isObjectIdOrHexString } = require("mongoose");
-const GasStation = require("../models/gas_station");
-var ObjectId = require("mongoose").Types.ObjectId;
-const io = require("../socket");
+import GasStation from "../models/gas_station.js";
+import { Types } from "mongoose";
+import io from "../socket.js";
+const { ObjectId } = Types;
 
-exports.deleteAllStations = async (req, res, next) => {
+export const deleteAllStations = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -24,7 +24,7 @@ exports.deleteAllStations = async (req, res, next) => {
     });
 };
 
-exports.importGasStations = async (req, res, next) => {
+export const importGasStations = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -61,7 +61,7 @@ exports.importGasStations = async (req, res, next) => {
     : res.status(404).json({ message: "no item found" });
 };
 
-exports.getStation = (req, res, next) => {
+export const getStation = (req, res, next) => {
   let totalItems;
   let newList;
 
@@ -106,7 +106,7 @@ exports.getStation = (req, res, next) => {
     });
 };
 
-exports.createStation = (req, res, next) => {
+export const createStation = (req, res, next) => {
   const label = req.body.label;
 
   GasStation.find({ label: label })
@@ -146,7 +146,7 @@ exports.createStation = (req, res, next) => {
     });
 };
 
-exports.updateStation = (req, res, next) => {
+export const updateStation = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 500;
@@ -198,7 +198,7 @@ exports.updateStation = (req, res, next) => {
     });
 };
 
-exports.deleteStation = (req, res, next) => {
+export const deleteStation = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 500;

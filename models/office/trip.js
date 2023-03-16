@@ -1,14 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const tripSchema = new Schema(
   {
     trip_date: {
       type: Date,
       required: true,
-      // default: Date.now,
-      // default: new Date().toString(),
     },
     user_id: {
       type: Schema.Types.ObjectId,
@@ -53,4 +51,6 @@ const tripSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("TripOffice", tripSchema);
+const TripOffice = mongoose.model("TripOffice", tripSchema);
+
+export default TripOffice;

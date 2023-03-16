@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const locationSchema = new Schema({
   trip_id: {
@@ -11,8 +11,6 @@ const locationSchema = new Schema({
   date: {
     type: Date,
     required: true,
-    // default: Date.now,
-    // default: new Date().toString(),
   },
   lat: {
     type: Number,
@@ -34,4 +32,6 @@ const locationSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("LocationOffice", locationSchema);
+const LocationOffice = mongoose.model("LocationOffice", locationSchema);
+
+export default LocationOffice;

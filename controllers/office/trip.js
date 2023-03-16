@@ -1,11 +1,15 @@
-const fs = require("fs");
-const path = require("path");
-const Trip = require("../../models/office/trip");
-const Location = require("../../models/office/location");
-const Diesel = require("../../models/office/diesel");
-const { validationResult } = require("express-validator");
+import fs from "fs";
+import path from "path";
+import Trip from "../../models/office/trip.js";
+import Location from "../../models/office/location.js";
+import Diesel from "../../models/office/diesel.js";
+import { validationResult } from "express-validator";
+import { fileURLToPath } from "url";
 
-exports.createApkTrip = (req, res, next) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const createApkTrip = (req, res, next) => {
   let newImageUrl;
   const errors = validationResult(req);
 
@@ -107,7 +111,7 @@ exports.createApkTrip = (req, res, next) => {
     });
 };
 
-exports.getApkTrips = (req, res, next) => {
+export const getApkTrips = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = req.query.limit || 25;
   let searchItem = req.query.search || "";
@@ -155,7 +159,7 @@ exports.getApkTrips = (req, res, next) => {
     });
 };
 
-exports.getTrips = (req, res, next) => {
+export const getTrips = (req, res, next) => {
   // office/trips?page=
   const currentPage = req.query.page || 1;
   const perPage = req.query.limit || 25;
@@ -174,6 +178,8 @@ exports.getTrips = (req, res, next) => {
           },
         }
       : {};
+
+  let totalItems;
 
   Trip.find(filter)
     .countDocuments()
@@ -256,7 +262,7 @@ exports.getTrips = (req, res, next) => {
     });
 };
 
-exports.updateTrip = (req, res, next) => {
+export const updateTrip = (req, res, next) => {
   const tripId = req.params.tripId;
   let newImageURL;
 
@@ -331,7 +337,7 @@ exports.updateTrip = (req, res, next) => {
     });
 };
 
-exports.deleteTrip = (req, res, next) => {
+export const deleteTrip = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -389,7 +395,7 @@ exports.deleteTrip = (req, res, next) => {
     });
 };
 
-exports.deleteAllTrips = (req, res, next) => {
+export const deleteAllTrips = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;

@@ -1,12 +1,18 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const fs = require("fs");
-const path = require("path");
-const { validationResult } = require("express-validator");
-const User = require("../models/user");
-require("dotenv").config();
+import jwt from "jsonwebtoken";
+import bcrypt from "fs";
+import path from "path";
+import { validationResult } from "express-validator";
+import User from "../models/user.js";
+import dotenv from "dotenv";
 
-exports.deleteAllUsers = async (req, res, next) => {
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config();
+
+export const deleteAllUsers = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -27,7 +33,7 @@ exports.deleteAllUsers = async (req, res, next) => {
     });
 };
 
-exports.importUsers = async (req, res, next) => {
+export const importUsers = async (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -78,7 +84,7 @@ exports.importUsers = async (req, res, next) => {
     : res.status(404).json({ message: "no item found" });
 };
 
-exports.updateUser = (req, res, next) => {
+export const updateUser = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -176,7 +182,7 @@ exports.updateUser = (req, res, next) => {
     });
 };
 
-exports.deleteUser = (req, res, next) => {
+export const deleteUser = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -206,7 +212,7 @@ exports.deleteUser = (req, res, next) => {
     });
 };
 
-exports.getUsers = (req, res, next) => {
+export const getUsers = (req, res, next) => {
   if (req.role !== "admin") {
     const error = new Error("Please make sure you're an admin");
     error.statusCode = 403;
@@ -301,7 +307,7 @@ exports.getUsers = (req, res, next) => {
   }
 };
 
-exports.createUser = (req, res, next) => {
+export const createUser = (req, res, next) => {
   const error = validationResult(req);
   let newImageURl;
   if (!error.isEmpty()) {
@@ -372,7 +378,7 @@ exports.createUser = (req, res, next) => {
     });
 };
 
-exports.login = (req, res, next) => {
+export const login = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   let loadedUser;

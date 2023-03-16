@@ -1,11 +1,10 @@
-const User = require("../models/user");
-const GasStation = require("../models/gas_station");
-const Vehicle = require("../models/vehicle");
-const Trip = require("../models/office/trip");
-const { getPathLength } = require("geolib");
-const dayjs = require("dayjs");
+import User from "../models/user.js";
+import Vehicle from "../models/vehicle.js";
+import Trip from "../models/office/trip.js";
+import { getPathLength } from "geolib";
+import dayjs from "dayjs";
 
-exports.TotalTripDriver = (req, res, next) => {
+export const TotalTripDriver = (req, res, next) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const search = req.query.search || "";
@@ -82,7 +81,7 @@ exports.TotalTripDriver = (req, res, next) => {
     });
 };
 
-exports.LongestTravelDuration = (req, res, next) => {
+export const LongestTravelDuration = (req, res, next) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const search = req.query.search || "";
@@ -164,7 +163,7 @@ exports.LongestTravelDuration = (req, res, next) => {
     });
 };
 
-exports.HighestKMrun = (req, res, next) => {
+export const HighestKMrun = (req, res, next) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const search = req.query.search || "";
@@ -241,7 +240,7 @@ exports.HighestKMrun = (req, res, next) => {
     });
 };
 
-exports.TVDTdeparment = async (req, res, next) => {
+export const TVDTdeparment = async (req, res, next) => {
   const page = req.query.page || 1;
   const limit = req.query.limit || 10;
   const search = req.query.search || "";

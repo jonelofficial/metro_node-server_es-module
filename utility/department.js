@@ -1,4 +1,4 @@
-const department = [
+export const department = [
   {
     id: 0,
     label: "Corporate",
@@ -484,5 +484,3 @@ const department = [
     label: "Area 14",
   },
 ];
-
-module.exports = department;

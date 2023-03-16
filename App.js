@@ -1,19 +1,25 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const bodyParse = require("body-parser");
-const mongoose = require("mongoose");
-const multer = require("multer");
-const { v4: uuidv4 } = require("uuid");
-require("dotenv").config({ path: "/.env" });
+import express from "express";
+import cors from "cors";
+import path from "path";
+import bodyParse from "body-parser";
+import mongoose from "mongoose";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import dotenv from "dotenv";
+import socket from "./socket.js";
 
-const authRoutes = require("./routes/auth");
-const vehicleRoutes = require("./routes/vehicle");
-const gasStationRoutes = require("./routes/gas_station");
+import { fileURLToPath } from "url";
 
-const officeTripRoutes = require("./routes/office/trip");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const dashboardRoutes = require("./routes/dashboard");
+dotenv.config({ path: "/.env" });
+
+import authRoutes from "./routes/auth.js";
+import vehicleRoutes from "./routes/vehicle.js";
+import gasStationRoutes from "./routes/gas_station.js";
+import officeTripRoutes from "./routes/office/trip.js";
+import dashboardRoutes from "./routes/dashboard.js";
 
 const app = express();
 
@@ -67,10 +73,6 @@ app.use("/gas-station", gasStationRoutes);
 // Office Routes
 app.use("/office", officeTripRoutes);
 
-// Hauling Routes
-// Delivery Routes
-// Feeds Delivery Routes
-
 // Dashboard
 app.use("/dashboard", dashboardRoutes);
 
@@ -86,7 +88,8 @@ mongoose
   .connect(process.env.DB_CONN)
   .then(() => {
     const server = app.listen(process.env.PORT || 8080);
-    const io = require("./socket").init(server);
+    // const io = require("./socket").init(server);
+    const io = socket.init(server);
     io.on("connection", (socket) => {
       console.log("Client Connected");
     });
